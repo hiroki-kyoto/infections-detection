@@ -1,6 +1,6 @@
 #Infection Detection
 
-Target: Detect out the infection category.
+Target: IDENTIFY the infection category.
 
 Method:
 
