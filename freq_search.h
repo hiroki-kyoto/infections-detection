@@ -20,11 +20,13 @@ struct CARD
 void freq_search()
 {
 	CARD card;
-	GENE L[4];//LABEL
+	GENE L[4]; //LABEL
 	L[0] = A;
 	L[1] = C;
 	L[2] = G;
 	L[3] = T;
+	L[4] = U;
+	L[5] = N; // UNKNOWN
 	for(int i=0; i<PITCH; i++)
 		card.data[i] = L[i%4];
 	for(int i=0; i<PITCH; i++)
