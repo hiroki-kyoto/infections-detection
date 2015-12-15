@@ -1,18 +1,16 @@
 #Infection Detection
 
-Target: IDENTIFY the infection category.
+**Target: IDENTIFY the infection category.**
 
-Method:
+**Method:**
 
 	1. GENERATE CARDS of GENEs, fixed LENGTH as 8.
 
-	2. FIND all PATTERNS in GENOME code.
-	(From human, bacteria, virus, etc.)
+	2. FIND all PATTERNS in GENOME code.(From human, bacteria, virus, etc.)
 
 	3. STORE statistical information of cards on disk. CREATE method to load them into memory fast.
 
-	4. FIND all PATTERNS in GENOME code.
-	(From test samples given correct labels.)
+	4. FIND all PATTERNS in GENOME code.(From test samples given correct labels.)
 
 	5. BUILD NEURAL NETWORK.
 
