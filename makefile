@@ -1,12 +1,11 @@
 # for sequence searching program
-all : freq_search.o
-t_freq_search.o : test/t_freq_search.cpp
-freq_search.o : freq_search.h
-
+all : build_lib.app
+build_lib.app : build_lib.o
+	g++ -o build_lib.app build_lib.o
+build_lib.o : build_lib.cpp settings.h
 .PHONY : clean
-
 clean :
 	-rm *.o
 	-rm .app
 install :
-	./infect_detect.app
+	./build_lib.app
