@@ -77,15 +77,117 @@ int main(int argc, const char ** argv)
 	cout<<">>>LIBS PATH SOLVED<<<"<<endl;
 	/* LOAD DATA FROM LIB */
 	// raw data of human	
-	in.open(lib_human);
+	in.open(lib_human, ios::binary);
 	char ch;
-	char card[CARD_SZE];
-	while(!in.eof())
+	char chromsome[100]; // chromsome name
+	char card[CARD_SIZE];
+	int reads = 0;
+	int mode = 0;
+	unsigned int index = 0;
+	// allocation of bars [histogram analysis]
+	unsigned int dim = 1;
+	dim <<= (CARD_SIZE*2);
+	cout<<"try to allocate memory for map: ";
+	cout<<(sizeof(unsigned long long))*dim
+		<<" Bytes"<<endl;
+	unsigned long long * bars = 
+		new unsigned long long[dim];
+	// check if allocating is successful or not
+	if(!bars)
 	{
-		in>>ch;
-		
+		cout<<"err: failed to allocate memory";
+		cout<<endl;
+		return -1;
+	}
+	else
+	{
+		// initialize bars
+		memset(bars, 0, 
+			dim*sizeof(unsigned long long));
+	}
+	// mode=0 means title, mode=1 means body
+	while(ch!=EOF)
+	{
+		// CASE CONVERT
+		if(ch>='a'&&ch<='z')
+			ch -= ('a'-'A');
+		// FASTA Format
+		if(ch=='>')
+		{
+			// switch to title mode
+			mode = 0;
+			reads = 0;
+		}
+		else
+		{
+			if(!mode)
+			{
+				if(ch=='\n')
+				{
+					chromsome[reads] = '\0';
+					// here forms a new strip of DNA
+					cout<<chromsome<<endl;
+					// switch to body mode
+					mode = 1;
+					reads = 0;
+				}
+				else
+				{
+					chromsome[reads] = ch;
+					reads ++;
+				}
+			}
+			else
+			{
+				// ignore concat-sign of genome
+				if(ch=='\n')
+				{
+					// ignore it
+				} // else if it is {A,C,G,T,N}
+				else if(ch==N)
+					reads = 0;
+				else
+				{
+					reads ++;
+					if(reads == CARD_SIZE)
+					{
+						// do stats
+						card[reads-1] = ch;
+						index = map(card);
+						bars[index] ++;
+						// shift left
+						memcpy(card, card+1, 
+							CARD_SIZE-1);
+						reads --;
+					}
+					else
+						card[reads-1] = ch;
+				}
+			}
+		}
+		// read in next char
+		ch = in.get();
 	}
 	in.close();
+	cout<<">>>HUMAN LIB INDEXING FINISHED"<<endl;
+	// now write index to disk
+	// check environment
+	if(sizeof(int)!<4)
+	{
+		cout<<"err: [int] type has to be 4 byte!";
+		cout<<endl;
+		cout<<"[Incompatible runtime environment]";
+		cout<<endl;
+	}
+	ofstream out;
+	out.open(IDX_HUMAN, ios);
+	for(unsigned int i=0; i<dim; i++)
+		out.put(bars[i]);
+	out.close();
+	cout<<">>>HUMAN LIB CONSTRUCTED<<<"<<endl;
 
+	// never forget to recycle memory
+	delete[] bars;
+	cout<<"memory of bars recycled"<<endl;
 	return 0;
 }

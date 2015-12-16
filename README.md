@@ -22,3 +22,8 @@
 
 	9. WRITE a report of this project. 
 
+**GENETIC ENCODING METHOD:**
+
+	1. Encoding: A:00, C:01, G:10, T:11
+
+	2. Example: AATTGGCC=>0000111110100101(2 byte)
