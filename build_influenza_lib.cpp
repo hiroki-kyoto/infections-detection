@@ -1,3 +1,4 @@
+// build_influenza_lib.cpp
 #include <iostream>
 #include <fstream>
 #include <string.h>
@@ -7,6 +8,14 @@ using namespace std;
 
 int main(int argc, const char ** argv)
 {
+	// check environment
+	if(sizeof(int)<4)
+	{
+		cout<<"err: [int] type has to be 4 byte!";
+		cout<<endl;
+		cout<<"[Incompatible runtime environment]";
+		cout<<endl;
+	}
 	cout<<">>>BUILDING GENOME LIBRARY<<<"<<endl;
 	/* load raw data from local path*/
 	// first, load settings
@@ -17,26 +26,8 @@ int main(int argc, const char ** argv)
 	in.close();
 	cout<<">>>PROGRAM SETTINGS LOADED<<<"<<endl;
 	// then read human lib
-	char lib_human[100];
 	char lib_influenza[100];
-	char lib_prokaryote[100];
-	char lib_virus[100];
-	memset(lib_human, 0, sizeof(lib_human));
 	memset(lib_influenza, 0, sizeof(lib_influenza));
-	memset(lib_prokaryote, 0, sizeof(lib_prokaryote));
-	memset(lib_virus, 0, sizeof(lib_virus));
-	// concat path of human lib
-	if(strlen(raw_data) + 
-		strlen(LIB_HUMAN) + 1 > 
-		sizeof(lib_human))
-	{
-		cout<<"error: file path too long!"<<endl;
-		return 1;
-	}
-	memcpy(lib_human, raw_data, strlen(raw_data));
-	memcpy(lib_human + strlen(lib_human),
-		LIB_HUMAN, strlen(LIB_HUMAN));
-	cout<<"LIB_HUMAN="<<lib_human<<endl;
 	// path of influenza path
 	if(strlen(raw_data) + 
 		strlen(LIB_INFLUENZA) + 1 > 
@@ -49,40 +40,21 @@ int main(int argc, const char ** argv)
 	memcpy(lib_influenza + strlen(lib_influenza),
 		LIB_INFLUENZA, strlen(LIB_INFLUENZA));
 	cout<<"LIB_INFLUENZA="<<lib_influenza<<endl;
-	// path of prokaryote lib
-	if(strlen(raw_data) + 
-		strlen(LIB_PROKARYOTE) + 1 > 
-		sizeof(lib_prokaryote))
-	{
-		cout<<"error: file path too long!"<<endl;
-		return 3;
-	}
-	memcpy(lib_prokaryote, raw_data, 
-		strlen(raw_data));
-	memcpy(lib_prokaryote + strlen(lib_prokaryote),
-		LIB_PROKARYOTE, strlen(LIB_PROKARYOTE));
-	cout<<"LIB_PROKARYOTE="<<lib_prokaryote<<endl;
-	// path of virus lib
-	if(strlen(raw_data) + 
-		strlen(LIB_VIRUS) + 1 > 
-		sizeof(lib_virus))
-	{
-		cout<<"error: file path too long!"<<endl;
-		return 4;
-	}
-	memcpy(lib_virus, raw_data, strlen(raw_data));
-	memcpy(lib_virus + strlen(lib_virus),
-		LIB_VIRUS, strlen(LIB_VIRUS));
-	cout<<"LIB_VIRUS="<<lib_virus<<endl;
 	cout<<">>>LIBS PATH SOLVED<<<"<<endl;
 	/* LOAD DATA FROM LIB */
 	// raw data of human	
-	in.open(lib_human, ios::binary);
+	in.open(lib_influenza);
+	// setting output header stream and index stream
+	ofstream index_stream;
+	ofstream title_stream;
+	index_stream.open(IDX_BASE, ios::app);
+	title_stream.open(NOT_BASE, ios::app);
+	
 	char ch;
-	char chromsome[100]; // chromsome name
+	char species[100]; // species name
 	char card[CARD_SIZE];
 	int reads = 0;
-	int mode = 0;
+	int mode = 0; // MUST BE 0 AS INITIAL VALUE
 	unsigned int index = 0;
 	// allocation of bars [histogram analysis]
 	unsigned int dim = 1;
@@ -106,6 +78,7 @@ int main(int argc, const char ** argv)
 			dim*sizeof(unsigned long long));
 	}
 	// mode=0 means title, mode=1 means body
+	ch = in.get();
 	while(ch!=EOF)
 	{
 		// CASE CONVERT
@@ -114,6 +87,16 @@ int main(int argc, const char ** argv)
 		// FASTA Format
 		if(ch=='>')
 		{
+			// check if exists any unsaved index data
+			if(mode==1)
+			{
+				// save last species index data and reset
+				for(unsigned int i=0; i<dim; i++)
+				{
+					index_stream<<bars[i]<<" ";
+					bars[i] = 0;
+				}
+			}
 			// switch to title mode
 			mode = 0;
 			reads = 0;
@@ -124,16 +107,17 @@ int main(int argc, const char ** argv)
 			{
 				if(ch=='\n')
 				{
-					chromsome[reads] = '\0';
-					// here forms a new strip of DNA
-					cout<<chromsome<<endl;
+					species[reads] = '\0';
+					// write name of species to notation file
+					title_stream<<species<<endl;
+					cout<<species<<endl;
 					// switch to body mode
 					mode = 1;
 					reads = 0;
 				}
 				else
 				{
-					chromsome[reads] = ch;
+					species[reads] = ch;
 					reads ++;
 				}
 			}
@@ -168,28 +152,14 @@ int main(int argc, const char ** argv)
 		// read in next char
 		ch = in.get();
 	}
-	in.close();
-	cout<<">>>HUMAN LIB INDEXING FINISHED"<<endl;
-	// now write index to disk
-	// check environment
-	if(sizeof(int)<4)
-	{
-		cout<<"err: [int] type has to be 4 byte!";
-		cout<<endl;
-		cout<<"[Incompatible runtime environment]";
-		cout<<endl;
-	}
-	ofstream out;
-	out.open(IDX_BASE);
+	// save the last species index data
 	for(unsigned int i=0; i<dim; i++)
-		out<<bars[i]<<" ";
-	cout<<">>>HUMAN LIB CONSTRUCTED<<<"<<endl;
-
-	// VIRUS LIB
-	//in.open(LIB_INFLUENZA);
-
-	// close index writer
-	out.close();
+		index_stream<<bars[i]<<" ";
+	// close reader
+	in.close();
+	index_stream.close();
+	title_stream.close();
+	cout<<">>>INFLUENZA LIB CONSTRUCTED<<<"<<endl;
 	// never forget to recycle memory
 	delete[] bars;
 	cout<<"memory of bars recycled"<<endl;

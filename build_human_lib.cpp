@@ -77,7 +77,7 @@ int main(int argc, const char ** argv)
 	cout<<">>>LIBS PATH SOLVED<<<"<<endl;
 	/* LOAD DATA FROM LIB */
 	// raw data of human	
-	in.open(lib_human, ios::binary);
+	in.open(lib_human);
 	char ch;
 	char chromsome[100]; // chromsome name
 	char card[CARD_SIZE];
@@ -106,6 +106,7 @@ int main(int argc, const char ** argv)
 			dim*sizeof(unsigned long long));
 	}
 	// mode=0 means title, mode=1 means body
+	ch = in.get();
 	while(ch!=EOF)
 	{
 		// CASE CONVERT
@@ -183,13 +184,14 @@ int main(int argc, const char ** argv)
 	out.open(IDX_BASE);
 	for(unsigned int i=0; i<dim; i++)
 		out<<bars[i]<<" ";
-	cout<<">>>HUMAN LIB CONSTRUCTED<<<"<<endl;
-
-	// VIRUS LIB
-	//in.open(LIB_INFLUENZA);
-
-	// close index writer
 	out.close();
+
+	// write name of index to notation file
+	out.open(NOT_BASE);
+	out<<"HUMAN"<<endl;
+	out.close();
+
+	cout<<">>>HUMAN LIB CONSTRUCTED<<<"<<endl;
 	// never forget to recycle memory
 	delete[] bars;
 	cout<<"memory of bars recycled"<<endl;

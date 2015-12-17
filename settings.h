@@ -16,7 +16,12 @@ const char * TST_CASE_C = "C.fq";
 const char * RSV_CASE_D = "D.fq";
 const char * RSV_CASE_E = "E.fq";
 
-// INDEX DATA FILE PATH
+// NOTATION OF INDEX
+const char * NOT_BASE = "NOT_BASE.nt";
+const char * NOT_TEST = "NOT_TEST.nt";
+const char * NOT_RSVL = "NOT_RSVL.nt";
+
+// INDEX FILE
 const char * IDX_BASE = "IDX_BASE.dx";
 const char * IDX_TEST = "IDX_TEST.dx";
 const char * IDX_RSVL = "IDX_RSVL.dx";
