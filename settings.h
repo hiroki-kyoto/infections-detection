@@ -6,12 +6,20 @@ const char * LIB_HUMAN = "LIB_HUMAN.fa";
 const char * LIB_INFLUENZA = "LIB_INFLUENZA.fa";
 const char * LIB_PROKARYOTE = "LIB_PROKARYOTE.fa";
 const char * LIB_VIRUS = "LIB_VIRUS.fa";
+// RAW DATA OF TEST SAMPLES
+const char * TST_CASE_A1 = "A1.fq";
+const char * TST_CASE_A2 = "A2.fq";
+const char * TST_CASE_B1 = "B1.fq";
+const char * TST_CASE_B2 = "B2.fq";
+const char * TST_CASE_C = "C.fq";
+// RAW DATA OF CASE TO BE RESOLVED
+const char * RSV_CASE_D = "D.fq";
+const char * RSV_CASE_E = "E.fq";
 
 // INDEX DATA FILE PATH
-const char * IDX_HUMAN = "IDX_HUMAN.dx";
-const char * IDX_INFLUENZA = "IDX_INFLUENZA.dx";
-const char * IDX_PROKARYOTE = "IDX_PROKARYOTE.dx";
-const char * IDX_VIRUS = "IDX_VIRUS.dx";
+const char * IDX_BASE = "IDX_BASE.dx";
+const char * IDX_TEST = "IDX_TEST.dx";
+const char * IDX_RSVL = "IDX_RSVL.dx";
 
 // CARD GENERATING CONFIURATION
 const int CARD_SIZE = 8;

@@ -172,7 +172,7 @@ int main(int argc, const char ** argv)
 	cout<<">>>HUMAN LIB INDEXING FINISHED"<<endl;
 	// now write index to disk
 	// check environment
-	if(sizeof(int)!<4)
+	if(sizeof(int)<4)
 	{
 		cout<<"err: [int] type has to be 4 byte!";
 		cout<<endl;
@@ -180,12 +180,17 @@ int main(int argc, const char ** argv)
 		cout<<endl;
 	}
 	ofstream out;
-	out.open(IDX_HUMAN, ios);
+	out.open(IDX_BASE);
 	for(unsigned int i=0; i<dim; i++)
-		out.put(bars[i]);
-	out.close();
+		out<<bars[i]<<" ";
 	cout<<">>>HUMAN LIB CONSTRUCTED<<<"<<endl;
 
+	// VIRUS LIB
+	in.open(LIB_INFLUENZA);
+	
+
+	// close index writer
+	out.close();
 	// never forget to recycle memory
 	delete[] bars;
 	cout<<"memory of bars recycled"<<endl;
