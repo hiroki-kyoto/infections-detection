@@ -26,6 +26,10 @@ const char * IDX_BASE = "IDX_BASE.dx";
 const char * IDX_TEST = "IDX_TEST.dx";
 const char * IDX_RSVL = "IDX_RSVL.dx";
 
+// TRAINING DATA
+const char * TRN_IN = "TRN_IN.dt";
+const char * TRN_OUT = "TRN_OUT.dt;
+
 // CARD GENERATING CONFIURATION
 const int CARD_SIZE = 8;
 const char A = 'A';

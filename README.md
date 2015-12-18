@@ -38,3 +38,11 @@
 
 	4. NOTATION FILE IS ALWAYS LINKED WITH INDEX FILE.
 
+**TRAIN:**
+	
+	1. (1<<(8x2)) = 65536
+	2. 65536/8 = 8192 => Feature Extraction
+	3. 8192x9847 index
+	4. stored in 9847 x (8192x4) [int] memory
+	5. write them into 8192 x (9847x4) [float] disk
+
