@@ -21,10 +21,10 @@ build_prokaryote_lib.app : build_prokaryote_lib.o
 	g++ -o build_prokaryote_lib.app build_prokaryote_lib.o
 build_prokaryote_lib.o : build_prokaryote_lib.cpp settings.h
 
-# check index isolated program
-check_index.app : check_index.o
-	g++ -o check_index.app check_index.o
-check_index.o : check_index.cpp
+# check
+check_sequence.app : check_sequence.o
+	g++ -o check_sequence.app check_sequence.o
+check_sequence.o : check_sequence.cpp
 
 .PHONY : clean
 clean :
@@ -43,4 +43,5 @@ virus_lib:
 	./build_virus_lib.app
 prokaryote_lib:
 	./build_prokaryote_lib.app
-
+check_sequence:
+	./check_sequence.app ../../AI/RAW/LIB_VIRUS.fa

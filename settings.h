@@ -51,7 +51,10 @@ inline unsigned int map(char* card)
 		else if(card[i]==T)
 			id += 3; // 11
 		else
+		{
 			std::cout<<"err: encoding card\n";
+			std::cout<<"cause: "<<card[i]<<std::endl;
+		}
 	}
 	return id;
 }
@@ -70,8 +73,6 @@ inline void map(char* card, unsigned int id)
 			card[i] = G;
 		else if(code==3)
 			card[i] = T;
-		else
-			std::cout<<"err: decoding index\n";
 	}
 }
 
