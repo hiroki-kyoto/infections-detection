@@ -6,12 +6,14 @@ const char * LIB_HUMAN = "LIB_HUMAN.fa";
 const char * LIB_INFLUENZA = "LIB_INFLUENZA.fa";
 const char * LIB_PROKARYOTE = "LIB_PROKARYOTE.fa";
 const char * LIB_VIRUS = "LIB_VIRUS.fa";
+
 // RAW DATA OF TEST SAMPLES
 const char * TST_CASE_A1 = "A1.fq";
 const char * TST_CASE_A2 = "A2.fq";
 const char * TST_CASE_B1 = "B1.fq";
 const char * TST_CASE_B2 = "B2.fq";
 const char * TST_CASE_C = "C.fq";
+
 // RAW DATA OF CASE TO BE RESOLVED
 const char * RSV_CASE_D = "D.fq";
 const char * RSV_CASE_E = "E.fq";
@@ -28,7 +30,8 @@ const char * IDX_RSVL = "IDX_RSVL.dx";
 
 // TRAINING DATA
 const char * TRN_IN = "TRN_IN.dt";
-const char * TRN_OUT = "TRN_OUT.dt;
+const char * TRN_OUT = "TRN_OUT.dt";
+const int SPECIES_NUMBER = 9847;
 
 // CARD GENERATING CONFIURATION
 const int CARD_SIZE = 8;
@@ -37,7 +40,6 @@ const char C = 'C';
 const char G = 'G';
 const char T = 'T';
 const char N = 'N';
-// lowercase2uppercase: if ch <= T
 
 // HASH MAP
 inline unsigned int map(char* card)
