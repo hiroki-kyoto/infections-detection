@@ -8,30 +8,35 @@ const char * LIB_PROKARYOTE = "LIB_PROKARYOTE.fa";
 const char * LIB_VIRUS = "LIB_VIRUS.fa";
 
 // RAW DATA OF TEST SAMPLES
-const char * TST_CASE_A1 = "A1.fq";
-const char * TST_CASE_A2 = "A2.fq";
-const char * TST_CASE_B1 = "B1.fq";
-const char * TST_CASE_B2 = "B2.fq";
-const char * TST_CASE_C = "C.fq";
+const char * TST_CASE_A1 = "TEST_A_1.fq";
+const char * TST_CASE_A2 = "TEST_A_2.fq";
+const char * TST_CASE_B1 = "TEST_B_1.fq";
+const char * TST_CASE_B2 = "TEST_B_2.fq";
+const char * TST_CASE_C = "TEST_C.fq";
+
+// SETTING FOR READING TEST CASE
+const int TST_CASE_LINE = 1024;
 
 // RAW DATA OF CASE TO BE RESOLVED
-const char * RSV_CASE_D = "D.fq";
-const char * RSV_CASE_E = "E.fq";
+const char * RSL_CASE_D = "SOLVE_D.fq";
+const char * RSL_CASE_E = "SOLVE_E.fq";
 
 // NOTATION OF INDEX
 const char * NOT_BASE = "NOT_BASE.nt";
-const char * NOT_TEST = "NOT_TEST.nt";
-const char * NOT_RSVL = "NOT_RSVL.nt";
 
 // INDEX FILE
 const char * IDX_BASE = "IDX_BASE.dx";
-const char * IDX_TEST = "IDX_TEST.dx";
-const char * IDX_RSVL = "IDX_RSVL.dx";
+const char * IDX_TEST_A = "IDX_TEST_A.dx";
+const char * IDX_TEST_B = "IDX_TEST_B.dx";
+const char * IDX_TEST_C = "IDX_TEST_C.dx";
+const char * IDX_RSLV_D = "IDX_RSLV_D.dx";
+const char * IDX_RSLV_E = "IDX_RSLV_E.dx";
 
 // TRAINING DATA
 const char * TRN_IN = "TRN_IN.dt";
 const char * TRN_OUT = "TRN_OUT.dt";
 const int SPECIES_NUMBER = 9847;
+// ABOVE GOT FROM NOTATION FIEL
 
 // CARD GENERATING CONFIURATION
 const int CARD_SIZE = 8;

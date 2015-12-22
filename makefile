@@ -2,7 +2,12 @@
 CC = g++ -o
 
 # for sequence searching program
-all : build_human_lib.app build_influenza_lib.app build_virus_lib.app build_prokaryote_lib.app convert_index.app
+all : build_human_lib.app build_influenza_lib.app build_virus_lib.app build_prokaryote_lib.app convert_index.app build_test_A.app
+
+# test A
+build_test_A.app : build_test_A.o
+	$(CC) build_test_A.app build_test_A.o
+build_test_A.o : build_test_A.cpp settings.h
 
 # convert index data(N=9847x65536) into matrix 
 # of 65536x9847
@@ -56,3 +61,5 @@ check_sequence:
 	./check_sequence.app ../../AI/RAW/LIB_VIRUS.fa
 convert_index:
 	./convert_index.app
+build_test_A:
+	./build_test_A.app
