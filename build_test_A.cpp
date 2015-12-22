@@ -12,7 +12,8 @@ int _getline_(ifstream & in, char * line)
 	char ch;
 	ch = in.get();
 	int i = 0;
-	while(ch!='\n'&&i<TST_CASE_LINE)
+
+	while(ch!='\n'&&i<TST_CASE_LINE&&ch!=EOF)
 	{
 		line[i] = ch;
 		ch = in.get();
@@ -68,7 +69,8 @@ int main(int argc, const char ** argv)
 	cout<<"A1: FILE SIZE = "<<file_size<<endl;
 	in.seekg(0, ios::beg);
 	// flag to show progress
-	unsigned long long reads = 0;// piece number
+	unsigned long long reads = 0;// bytes read already
+	int tick = 0;
 
 	char code[TST_CASE_LINE]; // 1024 as max
 	char score[TST_CASE_LINE];
@@ -164,8 +166,14 @@ int main(int argc, const char ** argv)
 		}
 
 		// show progress
-		cout<<"A1 : "<<reads<<" / "
-			<<file_size<<endl;
+		tick++;
+		if(tick==10000)
+		{
+			tick = 0;
+			double progress = file_size;
+			progress = reads/progress*100;
+			cout<<"A1 : "<<progress<<" % "<<endl;
+		}
 	}
 
 	in.close();
@@ -177,6 +185,7 @@ int main(int argc, const char ** argv)
 
 	// repeat with A2
 	reads = 0;
+	tick = 0;
 	while(1)
 	{
 		// read a peice of genetic code and score
@@ -185,7 +194,7 @@ int main(int argc, const char ** argv)
 		
 		if(len<1) // no more lines
 		{
-			cout<<"CASE A1 IS OVER!"<<endl;
+			cout<<"CASE A2 IS OVER!"<<endl;
 			break;
 		}
 		
@@ -242,8 +251,14 @@ int main(int argc, const char ** argv)
 		}
 
 		// show progress
-		cout<<"A2 : "<<reads<<" / "
-			<<file_size<<endl;
+		tick++;
+		if(tick==10000)
+		{
+			tick = 0;
+			double progress = file_size;
+			progress = reads/progress*100;
+			cout<<"A2 : "<<progress<<" % "<<endl;
+		}
 	}	
 	cout<<">>>TEST CASE A INDEXING FINISHED"<<endl;
 	// now write index to disk
@@ -270,6 +285,11 @@ int main(int argc, const char ** argv)
 		cout<<"err: allocation for [weit] failed!";
 		cout<<endl;
 		return -1;
+	}
+	else
+	{
+		// initialize
+		memset(weit, 0, sizeof(double)*com);
 	}
 
 	for(int i=0; i<com; i++)
