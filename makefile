@@ -2,7 +2,12 @@
 CC = g++ -o
 
 # for sequence searching program
-all : build_human_lib.app build_influenza_lib.app build_virus_lib.app build_prokaryote_lib.app convert_index.app build_test_A.app build_test_B.app
+all : build_human_lib.app build_influenza_lib.app build_virus_lib.app build_prokaryote_lib.app convert_index.app build_test_A.app build_test_B.app build_index.app
+
+# universal method to process genetic code file
+build_index.app : build_index.o
+	$(CC) build_index.app build_index.o
+build_index.o : build_index.o
 
 # test B
 build_test_B.app : build_test_B.o
@@ -70,3 +75,5 @@ test_A:
 	./build_test_A.app
 test_B:
 	./build_test_B.app
+test_C:
+	./build_index.app ../../AI/RAW/TEST_C.fq IDX_TEST_C.dx
