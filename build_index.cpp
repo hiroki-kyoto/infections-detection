@@ -32,6 +32,7 @@ int main(int argc, const char ** argv)
 		cout<<"err: unacceptable arguments"<<endl;
 		cout<<"tip: ./build_index.app"
 			<<" [input file] [output file]";
+		return 1;
 	}
 
 	const char * src = argv[1];

@@ -23,8 +23,9 @@ int main(int argc, const char ** argv)
 		cout<<endl;
 		return 1;
 	}
+	memset(bars, 0, sizeof(int)*com);
 
-	float ** mat = new float*[com];
+	double ** mat = new double*[com];
 	if(!mat)
 	{
 		cout<<"err: failed to allocate memory";
@@ -36,16 +37,18 @@ int main(int argc, const char ** argv)
 	for(int i=0; i<com; i++)
 	{
 		// feature vector shadow on species
-		mat[i] = new float[SPECIES_NUMBER];
+		mat[i] = new double[SPECIES_NUMBER];
 		if(!mat[i])
 		{
 			cout<<"err: failed to allocate memory";
 			cout<<endl;
 			return 3;
 		}
+		memset(mat[i], 0, 
+			sizeof(double)*SPECIES_NUMBER);
 	}
 
-	double sum = 0; // sum of each species
+	long long sum = 0; // sum of each species
 	int num = 0;
 
 	// load index database
@@ -63,6 +66,7 @@ int main(int argc, const char ** argv)
 		// load data from file
 		for(int i=0; i<com; i++)
 		{
+			bars[i] = 0;
 			for(int j=0; j<8; j++)
 			{
 				reader>>num;
@@ -73,8 +77,9 @@ int main(int argc, const char ** argv)
 		
 		// weight vector of this species
 		for(int i=0; i<com; i++)
-			mat[i][species] = (float)(bars[i]/sum);
-		cout<<"FINISH CONVERT PROCESS OF SPECIES-";
+			mat[i][species] = 
+				((double)bars[i])/((double)sum);
+		cout<<"SPECIES-";
 		cout<<species<<endl;
 	}
 	cout<<"PROCESS OF CONVERTING DONE!"<<endl;
@@ -89,6 +94,12 @@ int main(int argc, const char ** argv)
 	reader.close();
 	writer.close();
 	cout<<"PROGRAM COMPLETE SUCCESSFUL!"<<endl;
+
+	// recycle memory
+	delete [] bars;
+	for(int i=0; i<com; i++)
+		delete [] mat[i];
+	delete [] mat;
 
 	return 0;
 }
