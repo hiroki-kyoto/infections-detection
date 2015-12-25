@@ -1,0 +1,1 @@
+./explain.app B.TXT

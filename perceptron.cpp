@@ -157,7 +157,7 @@ int main(int argc, const char ** argv)
 			{
 				weit[j] +=
 					LEARNING_RATE*mat[i][j]*error;
-				if(weit[j]<0)
+				if(weit[j]<=0)
 					weit[j] = 1e-8;
 				if(weit[j]>major[0])
 				{
