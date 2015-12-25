@@ -2,12 +2,17 @@
 CC = g++ -o
 
 # for sequence searching program
-all : build_human_lib.app build_influenza_lib.app build_virus_lib.app build_prokaryote_lib.app convert_index.app build_test_A.app build_test_B.app build_index.app
+all : build_human_lib.app build_influenza_lib.app build_virus_lib.app build_prokaryote_lib.app convert_index.app build_test_A.app build_test_B.app build_index.app perceptron.app
+
+# model of perceptron
+perceptron.app : perceptron.o
+	$(CC) perceptron.app perceptron.o
+perceptron.o : perceptron.cpp
 
 # universal method to process genetic code file
 build_index.app : build_index.o
 	$(CC) build_index.app build_index.o
-build_index.o : build_index.o
+build_index.o : build_index.cpp
 
 # test B
 build_test_B.app : build_test_B.o

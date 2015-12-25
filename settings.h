@@ -38,6 +38,12 @@ const char * TRN_OUT = "TRN_OUT.dt";
 const int SPECIES_NUMBER = 9847;
 // ABOVE GOT FROM NOTATION FIEL
 
+// TRAINING SETTINGS
+const int MAX_REPEAT = 800;
+const double MAX_ERROR = 1e-3;
+const double LEARNING_RATE = 1.0;
+const int MAJOR_SIZE = 10;
+
 // CARD GENERATING CONFIURATION
 const int CARD_SIZE = 8;
 const char A = 'A';
