@@ -2,7 +2,12 @@
 CC = g++ -o
 
 # for sequence searching program
-all : build_human_lib.app build_influenza_lib.app build_virus_lib.app build_prokaryote_lib.app convert_index.app build_test_A.app build_test_B.app build_index.app perceptron.app
+all : build_human_lib.app build_influenza_lib.app build_virus_lib.app build_prokaryote_lib.app convert_index.app build_test_A.app build_test_B.app build_index.app perceptron.app explain.app
+
+# explain.app
+explain.app : explain.o
+	$(CC) explain.app explain.o
+explain.o : explain.cpp
 
 # model of perceptron
 perceptron.app : perceptron.o
