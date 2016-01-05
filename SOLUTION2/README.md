@@ -24,8 +24,14 @@
 
 **2.HOW IT WORKS?**
 	i.  search for k-gram[k=10 in this application] patterns, and store their
+
 	    statistical data into files, which is an inverted list.
+
 	ii. scan through the test file to match with patterns and then math with
+
 	    secondary patterns and then third, etc. Til no more pattern could be 
+
 	    matched.
+
 	iii.report DocID(Chromsome Name) to final list. It is the output expected.
+
