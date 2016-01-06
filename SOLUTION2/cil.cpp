@@ -39,12 +39,48 @@ int main(int argc, const char ** argv)
 	fout.open(fname, ios::out);
 	
 	// process human chromsome lib
-	if(loadName(cname, fin))
+	char card[CARD_SIZE];
+	char next[CARD_SIZE];
+	int csize. nsize; // size of card and next card
+	
+	bool _continue_ = true;
+	while(loadName(cname, fin) && _continue_)
 	{
 		// store its chromsome name
 		fout<<cname<<endl;
 		// process genetic code
-			
+		while((ch=fin.get())!='\n')
+		{
+			if(ch==EOF)
+			{
+				cout<<"Error: ";
+				cout<<"FASTA bad format!";
+				_continue_ = false;
+				break;
+			}
+			if(ch!=A&&ch!=C&&ch!=G&&ch!=T)
+			{
+				csize = 0;
+				nsize = 0;
+			}
+			else if(csize<CARD_SIZE)
+			{
+				if(nsize<CARD_SIZE)
+					next[nsize++] = ch;
+				else
+				{
+					card[csize++] = next[0];
+					memcpy(next, next+1, 
+							CARD_SIZE-1);
+					next[nsize++] = ch;
+				}
+			}
+			else // csize = CARD_SIZE
+			{
+				// process two card
+				
+			}
+		}
 	}
 	fin.close();
 	fout.close();

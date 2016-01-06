@@ -3,12 +3,14 @@
 #define BASIC_H
 
 #include <iostream>
+#include "config.h"
 
 // the structure of node
 struct node 
 {
 	node * last; // last node linked to
-	void * data; // data to store
+	int docId; // Doc ID
+	int nextPattern; // Next Pattern ID
 };
 
 // structure of linked list
@@ -19,6 +21,14 @@ struct list
 	int size;
 };
 
+
+/** function declaration **/
+inline void Lini(list *l);
+inline void Lempty(list *l);
+inline void Ladd(list *l, int docId, int nextPattern);
+inline void Lpop(list *l, int &docId, int &nextPattern);
+
+
 inline void Lini(list * l)
 {
 	l->head = NULL;
@@ -26,40 +36,58 @@ inline void Lini(list * l)
 	l->size = 0;
 }
 
-inline void Ldel(list * l)
+inline void Lempty(list * l)
 {
-	
+	int docId, nextPattern;
+	while(l->size)
+	{
+		Lpop(l, docId, nextPattern);
+#ifdef _DEBUG_
+		std::cout<<"docId="<<docId<<"\t";
+		std::cout<<"nextPattern="<<nextPattern;
+		std::cout<<"\n";
+#endif
+	}
 }
 
-inline void Ladd(list * l, node * n)
+inline void Ladd(list * l, int docId, int nextPattern)
 {
 	// from empty to non-empty
 	if(l->size==0)
 	{
+		node * n = new node;
+		n->last = NULL;
+		n->docId = docId;
+		n->nextPattern = nextPattern;
+		
 		l->head = l->tail = n;
-		size = 1;
+		l->size = 1;
 	}
 	else
 	{
+		node * n = new node;
+		n->last = NULL;	
+		n->docId = docId;
+		n->nextPattern = nextPattern;
+		
 		l->head->last = n;
 		l->head = n;
-		size ++;
+		l->size ++;
 	}
 }
 
-inline node * Lpop(list * l)
+inline void Lpop(list * l, int & docId, int & nextPattern)
 {
 	if(l->size==0)
-	{
 		std::cout<<"Error: empty list!\n";
-		return NULL;
-	}
 	else
 	{
 		node * n = l->tail;
 		l->tail = l->tail->last;
 		l->size --;
-		return n;
+		docId = n->docId;
+		nextPattern =  n->nextPattern;
+		delete n;
 	}
 }
 

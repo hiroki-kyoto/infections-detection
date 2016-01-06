@@ -8,13 +8,14 @@ int main()
 	node * n2 = new node;
 	node * n3 = new node;
 	
-	int * data1 = new int(3);
-	int * data2 = new int(5);
-	int * data3 = new int(11);
+	n1->docId = 0;
+	n1->nextPattern = 183;
 	
-	n1->data = data1;
-	n2->data = data2;
-	n3->data = data3;
+	n2->docId = 1;
+	n2->nextPattern = 9432;
+	
+	n3->docId = 4;
+	n3->nextPattern = 3932;
 	
 	n3->last = n2;
 	n2->last = n1;
@@ -24,7 +25,8 @@ int main()
 	
 	while(n!=NULL)
 	{
-		std::cout<<*(int*)(n->data)<<"\t";
+		std::cout<<n->docId<<"\t";
+		std::cout<<n->nextPattern<<"\t";
 		n = n->last;
 	}
 	
@@ -32,8 +34,5 @@ int main()
 	delete n2;
 	delete n3;
 
-	delete data1;
-	delete data2;
-	delete data3;
 	return 0;
 }
