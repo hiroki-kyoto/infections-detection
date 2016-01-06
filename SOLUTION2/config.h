@@ -1,8 +1,10 @@
 // config.h
 // configuration of this application
+const char * P_OUTPUT = "output/";
 const char * F_OFFSET = "offset.txt";
 const char * F_INVERTED_LIST = "inverted_list.txt";
 const char * F_OUTPUT = "output.txt";
+const char * F_NAME_LIST = "name_list.txt";
 
 // path of raw data
 const char * P_RAW_DATA = "/media/xiang/DATA/Downloads/PR_DATA/AAI/RAW_DATA/";
