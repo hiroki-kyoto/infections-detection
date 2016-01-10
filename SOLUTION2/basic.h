@@ -9,7 +9,6 @@
 struct node 
 {
 	node * last; // last node linked to
-	int id; // pattern id
 	int doc; // document id
 	int next; // next pattern id
 };
@@ -26,8 +25,8 @@ struct list
 /** function declaration **/
 inline void Lini(list *l);
 inline void Lempty(list *l);
-inline void Ladd(list *l, int id, int doc, int next);
-inline void Lpop(list *l, int & id, int &doc, int &next);
+inline void Ladd(list *l, int doc, int next);
+inline void Lpop(list *l, int &doc, int &next);
 
 
 inline void Lini(list * l)
@@ -39,26 +38,24 @@ inline void Lini(list * l)
 
 inline void Lempty(list * l)
 {
-	int docId, nextPattern;
+	int doc, next;
 	while(l->size)
 	{
-		Lpop(l, docId, nextPattern);
+		Lpop(l, doc, next);
 #ifdef _DEBUG_
-		std::cout<<"docId="<<docId<<"\t";
-		std::cout<<"nextPattern="<<nextPattern;
-		std::cout<<"\n";
+		std::cout<<"doc="<<doc<<"\t";
+		std::cout<<"next="<<next<<"\n";
 #endif
 	}
 }
 
-inline void Ladd(list * l, int id, int doc, int next)
+inline void Ladd(list * l, int doc, int next)
 {
 	// from empty to non-empty
 	if(l->size==0)
 	{
 		node * n = new node;
 		n->last = NULL;
-		n->id = id;
 		n->doc = doc;
 		n->next = next;
 		
@@ -69,7 +66,6 @@ inline void Ladd(list * l, int id, int doc, int next)
 	{
 		node * n = new node;
 		n->last = NULL;	
-		n->id = id;
 		n->doc = doc;
 		n->next = next;
 		
@@ -79,7 +75,7 @@ inline void Ladd(list * l, int id, int doc, int next)
 	}
 }
 
-inline void Lpop(list * l, int & id, int & docId, int & nextPattern)
+inline void Lpop(list * l, int & doc, int & next)
 {
 	if(l->size==0)
 		std::cout<<"Error: empty list!\n";
@@ -88,7 +84,6 @@ inline void Lpop(list * l, int & id, int & docId, int & nextPattern)
 		node * n = l->tail;
 		l->tail = l->tail->last;
 		l->size --;
-		id = n->id;
 		doc = n->doc;
 		next =  n->next;
 		delete n;

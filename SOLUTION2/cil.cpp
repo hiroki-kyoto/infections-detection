@@ -18,10 +18,24 @@ inline bool loadName(char * name, fstream & fs);
 
 int main(int argc, const char ** argv)
 {
+	// inverted list in cache
+	int n = 1<<20;
+	list * lst = new list[n];
+
+	if(!lst)
+	{
+		cout<<"memory allocation failed!"<<endl;
+		return 1; // return error!
+	}
+
+	for(int i=0; i<n; i++)
+		Lini(lst+i);
+
 	// files to read and write
 	fstream fin;
 	fstream fout;
 	fstream flst;
+	fstream fpos;
 	
 	// data path configuration
 	char fname[FILE_NAME_LEN]; // file name
@@ -41,29 +55,13 @@ int main(int argc, const char ** argv)
 	cout<<"name list: "<<fname<<endl;
 	fout.open(fname, ios::out);
 
-	// close last IL file and create a new one to write into.
-	ss.str(""); // make it empty
-	ss<<"INVERTED_LIST_"file_id<<".txt";
-	const char * f_list =  ss.str().c_str();
-	memcpy(fname, P_OUT, strlen(P_OUT) + 1);
-	memcpy(fname + strlen(fname), \
-			f_list, strlen(f_list) + 1);
-	cout<<"writing inverted list into file: "<<fname<<endl;
-	flst.close();
-	flst.open(fname, ios::out);
-	file_id ++;
-	
 	// process human chromsome lib
 	char card[CARD_SIZE];
 	char next[CARD_SIZE];
 	int csize, nsize;
-
-	// inverted list in cache
-	list * lst = new list;
 	int item_counter = 0;
 	int doc_counter = 0;
 	int id, nid;
-	Lini(lst);
 
 	// inverted list file
 	stringstream ss;
@@ -74,6 +72,7 @@ int main(int argc, const char ** argv)
 	{
 		// store its chromsome name
 		fout<<cname<<endl;
+		doc_counter ++;
 		// process genetic code
 		while((ch=fin.get())!='\n')
 		{
@@ -108,8 +107,49 @@ int main(int argc, const char ** argv)
 				// process two card
 				id = encode(card);
 				nid = encode(next);
-				Ladd(l, id, doc_counter, nid);
+				Ladd(lst+id, doc_counter, nid);
 				item_counter ++;
+
+				// if it reached memory limit, save ilist to files
+				if(item_counter>IL_CACHE_SIZE)
+				{
+					// close last IL file and create a new one to write into.
+					ss.str(""); // make it empty
+					ss<<"IL_"<<file_id<<".txt";
+					const char * f_list =  ss.str().c_str();
+					memcpy(fname, P_OUT, strlen(P_OUT) + 1);
+					memcpy(fname+strlen(fname), f_list, strlen(f_list)+1);
+					cout<<"writing inverted list into file: "<<fname<<endl;
+					flst.open(fname, ios::out|ios::binary);
+
+					ss.str("");
+					ss<<"POS_"<<file_id<<".txt";
+					const char * f_pos = ss.str().c_str();
+					memcpy(fname, P_OUT, strlen(P_OUT)+1);
+					memcpy(fname+strlen(fname), f_pos, strlen(f_pos)+1);
+					cout<<"writing position information into file: "<<fname<<endl;
+					fpos.open(fname, ios::out|ios::binary);
+
+					file_id ++;
+
+					// clear all items in memory and save into local disk
+					int _doc, _next;
+
+					for(int i=0; i<n; i++)
+					{
+						fpos.write(lst[i].size);
+						while(lst[i].size>0)
+						{
+							Lpop(lst+i, _doc, _next);
+							flst.write(_doc);
+							flst.write(_next);
+						}
+					}
+
+					fpos.close();
+					flst.close();
+					item_counter = 0;
+				}
 			}
 		}
 	}
@@ -120,6 +160,8 @@ int main(int argc, const char ** argv)
 
 	fin.close();
 	fout.close();
+	fpos.close();
+	flst.close();
 
 	return 0;
 }
