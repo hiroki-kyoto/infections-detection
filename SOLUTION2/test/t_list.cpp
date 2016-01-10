@@ -14,7 +14,7 @@ int main()
 	
 	int docId, nextPattern;
 	Lpop(l, docId, nextPattern);
-	cout<<"docId="<<docId;
+	cout<<"docId="<<docId<<"\t";
 	cout<<"nextPattern="<<nextPattern;
 	cout<<endl;
 	cout<<"===empty==="<<endl;

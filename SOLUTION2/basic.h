@@ -9,8 +9,9 @@
 struct node 
 {
 	node * last; // last node linked to
-	int docId; // Doc ID
-	int nextPattern; // Next Pattern ID
+	int id; // pattern id
+	int doc; // document id
+	int next; // next pattern id
 };
 
 // structure of linked list
@@ -25,8 +26,8 @@ struct list
 /** function declaration **/
 inline void Lini(list *l);
 inline void Lempty(list *l);
-inline void Ladd(list *l, int docId, int nextPattern);
-inline void Lpop(list *l, int &docId, int &nextPattern);
+inline void Ladd(list *l, int id, int doc, int next);
+inline void Lpop(list *l, int & id, int &doc, int &next);
 
 
 inline void Lini(list * l)
@@ -50,15 +51,16 @@ inline void Lempty(list * l)
 	}
 }
 
-inline void Ladd(list * l, int docId, int nextPattern)
+inline void Ladd(list * l, int id, int doc, int next)
 {
 	// from empty to non-empty
 	if(l->size==0)
 	{
 		node * n = new node;
 		n->last = NULL;
-		n->docId = docId;
-		n->nextPattern = nextPattern;
+		n->id = id;
+		n->doc = doc;
+		n->next = next;
 		
 		l->head = l->tail = n;
 		l->size = 1;
@@ -67,8 +69,9 @@ inline void Ladd(list * l, int docId, int nextPattern)
 	{
 		node * n = new node;
 		n->last = NULL;	
-		n->docId = docId;
-		n->nextPattern = nextPattern;
+		n->id = id;
+		n->doc = doc;
+		n->next = next;
 		
 		l->head->last = n;
 		l->head = n;
@@ -76,7 +79,7 @@ inline void Ladd(list * l, int docId, int nextPattern)
 	}
 }
 
-inline void Lpop(list * l, int & docId, int & nextPattern)
+inline void Lpop(list * l, int & id, int & docId, int & nextPattern)
 {
 	if(l->size==0)
 		std::cout<<"Error: empty list!\n";
@@ -85,10 +88,47 @@ inline void Lpop(list * l, int & docId, int & nextPattern)
 		node * n = l->tail;
 		l->tail = l->tail->last;
 		l->size --;
-		docId = n->docId;
-		nextPattern =  n->nextPattern;
+		id = n->id;
+		doc = n->doc;
+		next =  n->next;
 		delete n;
 	}
 }
+
+
+// hash map encode method
+inline void encode(char * card, int & id)
+{
+	id = 0;
+	for(int i=0; i<CARD_SIZE; i++)
+	{
+		id = 4*id 
+			+ (card[i]==A)*0
+			+ (card[i]==C)*1
+			+ (card[i]==G)*2
+			+ (card[i]==T)*3
+			;
+	}
+}
+
+// decode method
+inline void decode(char * card, int id)
+{
+	char gram[4];
+
+	gram[0] = A;
+	gram[1] = C;
+	gram[2] = G;
+	gram[3] = T;
+
+	for(int i=CARD_SIZE-1; i>=0; i--)
+	{
+		card[i] = gram[id%4];
+		id = id/4;
+	}
+}
+
+
+
 
 #endif

@@ -1,5 +1,5 @@
 # makefile for test build
-all : t_node.app t_list.app
+all : t_node.app t_list.app t_encode.app
 
 CC = g++ -o
 
@@ -11,6 +11,10 @@ t_list.app : t_list.o
 	$(CC) t_list.app t_list.o
 t_list.o : t_list.cpp
 
+t_encode.app:t_encode.o
+	$(CC) t_encode.app t_encode.o
+t_encode.o:t_encode.cpp
+
 clean : 
 	-rm *.o
 	-rm *.app
@@ -18,3 +22,4 @@ clean :
 run :
 	./t_node.app
 	./t_list.app
+	./t_encode.app

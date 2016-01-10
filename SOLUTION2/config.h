@@ -37,4 +37,9 @@ const char T = 'T';
 const int END = -1;
 const int MIN_MATCH = 5;
 
+// cache settings for inverted list
+const int IL_CACHE_SIZE = 8000000;
+
+
+
 
