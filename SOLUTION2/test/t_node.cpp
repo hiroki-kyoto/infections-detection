@@ -8,14 +8,14 @@ int main()
 	node * n2 = new node;
 	node * n3 = new node;
 	
-	n1->docId = 0;
-	n1->nextPattern = 183;
+	n1->doc = 0;
+	n1->next = 183;
 	
-	n2->docId = 1;
-	n2->nextPattern = 9432;
+	n2->doc = 1;
+	n2->next = 9432;
 	
-	n3->docId = 4;
-	n3->nextPattern = 3932;
+	n3->doc = 4;
+	n3->next = 3932;
 	
 	n3->last = n2;
 	n2->last = n1;
@@ -25,8 +25,8 @@ int main()
 	
 	while(n!=NULL)
 	{
-		std::cout<<n->docId<<"\t";
-		std::cout<<n->nextPattern<<"\t";
+		std::cout<<n->doc<<"\t";
+		std::cout<<n->next<<"\t";
 		n = n->last;
 	}
 	

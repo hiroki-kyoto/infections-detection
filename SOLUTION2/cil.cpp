@@ -44,7 +44,7 @@ int main(int argc, const char ** argv)
 	// open human genetic code file to read
 	memcpy(fname, P_RAW, strlen(P_RAW) + 1);
 	memcpy(fname + strlen(fname), \
-		F_HUMAN, strlen(F_HUMAN) + 1);
+		F_HUM, strlen(F_HUM) + 1);
 	cout<<"human: "<<fname<<endl;
 	fin.open(fname, ios::in);
 	
@@ -56,58 +56,54 @@ int main(int argc, const char ** argv)
 	fout.open(fname, ios::out);
 
 	// process human chromsome lib
-	char card[CARD_SIZE];
-	char next[CARD_SIZE];
-	int csize, nsize;
+	char band[CARD_SIZE*2]; // current + next
+	int band_size = 0;
 	int item_counter = 0;
 	int doc_counter = 0;
-	int id, nid;
+	int id, next;
 
 	// inverted list file
+	int mode = 0; // data set index
 	stringstream ss;
 	int file_id = 0;
-	
 	bool _continue_ = true;
-	while(loadName(cname, fin) && _continue_)
+	char ch; // to read
+
+_CST_IL_:
+	_continue_ = true;
+	fin.get(); // drop ">"
+	while(_continue_)
 	{
+		if(!loadName(cname, fin))
+			break;
 		// store its chromsome name
 		fout<<cname<<endl;
-		doc_counter ++;
 		// process genetic code
-		while((ch=fin.get())!='\n')
+		band_size = 0;
+		
+		while((ch=fin.get())!='>')
 		{
 			if(ch==EOF)
 			{
-				cout<<"Error: ";
-				cout<<"FASTA bad format!";
 				_continue_ = false;
 				break;
 			}
+			if(ch=='\n')
+				continue;
 			if(ch!=A&&ch!=C&&ch!=G&&ch!=T)
-			{
-				csize = 0;
-				nsize = 0;
-			}
-			else if(csize<CARD_SIZE)
-			{
-				if(nsize<CARD_SIZE)
-					next[nsize++] = ch;
-				else
-				{
-					card[csize++] = next[0];
-					memcpy( next,
-						next + 1,
-						CARD_SIZE - 1
-						);
-					next[nsize++] = ch;
-				}
-			}
+				band_size = 0;
+			else if(band_size<CARD_SIZE*2)
+				band[band_size++] = ch;
 			else
 			{
 				// process two card
-				id = encode(card);
-				nid = encode(next);
-				Ladd(lst+id, doc_counter, nid);
+				encode(band, id);
+				encode(band+CARD_SIZE, next);
+
+				// update band
+				move_left(band, sizeof(band), 1, ch);
+
+				Ladd(lst+id, doc_counter, next);
 				item_counter ++;
 
 				// if it reached memory limit, save ilist to files
@@ -137,12 +133,12 @@ int main(int argc, const char ** argv)
 
 					for(int i=0; i<n; i++)
 					{
-						fpos.write(lst[i].size);
+						fpos.write((char*)&(lst[i].size), sizeof(int));
 						while(lst[i].size>0)
 						{
 							Lpop(lst+i, _doc, _next);
-							flst.write(_doc);
-							flst.write(_next);
+							flst.write((char*)&_doc, sizeof(int));
+							flst.write((char*)&_next, sizeof(int));
 						}
 					}
 
@@ -152,16 +148,95 @@ int main(int argc, const char ** argv)
 				}
 			}
 		}
-	}
-	
-	// finalize
-	Lempty(lst);
-	delete lst;
 
+		// write the last few cards
+		for(; band_size>=CARD_SIZE; band_size--)
+		{
+			encode(band, id);
+			if(band_size==2*CARD_SIZE)
+				encode(band+CARD_SIZE, next);
+			else
+				next = END;
+			Ladd(lst+id, doc_counter, next);
+			item_counter ++;
+			move_left(band, sizeof(band), 1);
+		}
+
+		// document number auto-increment
+		doc_counter ++;
+	}
+
+	// close filestream
 	fin.close();
-	fout.close();
+	mode ++;
+
+	// open virus genetic code file to read
+	if(mode==1)
+	{
+		memcpy(fname, P_RAW, strlen(P_RAW) + 1);
+		memcpy(fname + strlen(fname), F_VIR, strlen(F_VIR) + 1);
+		cout<<"virus: "<<fname<<endl;
+		fin.open(fname, ios::in);
+		goto _CST_IL_;
+	}
+
+	// open influenza genetic code file to read
+	if(mode==2)
+	{
+		memcpy(fname, P_RAW, strlen(P_RAW) + 1);
+		memcpy(fname + strlen(fname), F_INF, strlen(F_INF) + 1);
+		cout<<"flu: "<<fname<<endl;
+		fin.open(fname, ios::in);
+		goto _CST_IL_;
+	}
+
+	// open all infectious genetic code file to read
+	if(mode==3)
+	{
+		memcpy(fname, P_RAW, strlen(P_RAW) + 1);
+		memcpy(fname + strlen(fname), F_ALL, strlen(F_ALL) + 1);
+		cout<<"all: "<<fname<<endl;
+		fin.open(fname, ios::in);
+		goto _CST_IL_;
+	}
+
+	// deal with rest of inverted list
+	ss.str("");
+	ss<<"IL_"<<file_id<<".txt";
+	const char * fl =  ss.str().c_str();
+	memcpy(fname, P_OUT, strlen(P_OUT) + 1);
+	memcpy(fname+strlen(fname), fl, strlen(fl)+1);
+	cout<<"writing inverted list into file: "<<fname<<endl;
+	flst.open(fname, ios::out|ios::binary);
+	
+	ss.str("");
+	ss<<"POS_"<<file_id<<".txt";
+	const char * fn = ss.str().c_str();
+	memcpy(fname, P_OUT, strlen(P_OUT)+1);
+	memcpy(fname+strlen(fname), fn, strlen(fn)+1);
+	cout<<"writing position information into file: "<<fname<<endl;
+	fpos.open(fname, ios::out|ios::binary);
+	file_id ++;
+	// clear all items in memory and save into local disk
+	int _doc_, _next_;
+	for(int i=0; i<n; i++)
+	{
+		fpos.write((char*)&(lst[i].size), sizeof(int));
+		while(lst[i].size>0)
+		{
+			Lpop(lst+i, _doc_, _next_);
+			flst.write((char*)&_doc_, sizeof(int));
+			flst.write((char*)&_next_, sizeof(int));
+		}
+	}
+
 	fpos.close();
 	flst.close();
+	item_counter = 0;
+	
+	// finalize
+	fout.close();
+	delete[] lst;
 
 	return 0;
 }

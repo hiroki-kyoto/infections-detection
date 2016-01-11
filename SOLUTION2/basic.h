@@ -39,6 +39,7 @@ inline void Lini(list * l)
 inline void Lempty(list * l)
 {
 	int doc, next;
+
 	while(l->size)
 	{
 		Lpop(l, doc, next);
@@ -123,7 +124,61 @@ inline void decode(char * card, int id)
 	}
 }
 
+// memory move
+inline void move_left(char * block, int size, int offset, char ch=0)
+{
+	if(size<=0)
+	{
+		std::cout<<"Error: move_left param [size]<=0\n";
+		return;
+	}
+	if(offset<0)
+	{
+		std::cout<<"Error: move_left param [offset]<=0\n";
+		return;
+	}
 
+	if(!offset)
+		return;
+	if(offset>size)
+	{
+		std::cout<<"Error: move_left param [offset]>[size]\n";
+		return;
+	}
+
+	for(int i=offset; i<size; i++)
+		block[i-offset] = block[i];
+	// fill in the blank zone with default char
+	for(int i=0; i<offset; i++)
+		block[size-1-i] = ch;
+}
+
+inline void move_right(char * block, int size, int offset, char ch=0)
+{
+	if(size<=0)
+	{
+		std::cout<<"Error: move_right param [size]<=0!\n";
+		return;
+	}
+	if(offset<0)
+	{
+		std::cout<<"Error: move_right param [offset]<=0!\n";
+		return;
+	}
+	if(!offset)
+		return;
+	if(offset>size)
+	{
+		std::cout<<"Error: move_right param [offset]>[size]\n";
+		return;
+	}
+
+	for(int i=size-1-offset; i>=0; i--)
+		block[i+offset] = block[i];
+	for(int i=0; i<offset; i++)
+		block[i] = ch;
+}
 
 
 #endif
+
